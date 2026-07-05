@@ -72,7 +72,7 @@ const projects = [
       "A Spotify-inspired full-stack real-time music streaming web application with playback controls, playlists, favorites, social features, and admin content management.",
     summary:
       "SoundSip is a group-built music streaming platform. My work focused on the persistent music player, global playback state, queue controls, shuffle/repeat logic, liked songs, playlist management, home dashboard sections, listening history, user search, settings integration, and real-time activity broadcasting with Socket.io.",
-    live: "",
+    live: "https://soundsip.onrender.com/landing",
     github: "https://github.com/SayemHasan74/SoundSip",
     features: [
       "Persistent bottom playback bar with play/pause, next/previous, progress seek, volume, mute, shuffle, and repeat modes.",
