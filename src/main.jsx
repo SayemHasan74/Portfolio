@@ -66,27 +66,32 @@ const projects = [
     name: "SoundSip",
     eyebrow: "Music App",
     imageType: "music",
-    role: "Full project builder",
-    stack: ["Frontend", "Media UI", "Audio Experience", "Music Discovery", "Project details to be updated"],
+    role: "Full-stack developer in group project",
+    stack: ["React 18", "TypeScript", "Vite", "Tailwind CSS", "Zustand", "Socket.io", "Node.js", "Express", "MongoDB", "Mongoose", "Clerk", "Cloudinary"],
     description:
-      "A music-focused application project prepared for a polished listening, discovery, and playlist experience.",
+      "A Spotify-inspired full-stack real-time music streaming web application with playback controls, playlists, favorites, social features, and admin content management.",
     summary:
-      "SoundSip is a music app project focused on creating a smooth and modern media experience. The portfolio entry is ready for future screenshots, live deployment, playback features, playlist details, and a complete technical write-up as the project grows.",
+      "SoundSip is a group-built music streaming platform. My work focused on the persistent music player, global playback state, queue controls, shuffle/repeat logic, liked songs, playlist management, home dashboard sections, listening history, user search, settings integration, and real-time activity broadcasting with Socket.io.",
     live: "",
     github: "https://github.com/SayemHasan74/SoundSip",
     features: [
-      "Music app project with a ready portfolio detail page.",
-      "Prepared structure for media playback, playlists, discovery, and screenshots.",
-      "GitHub repository connected for future updates.",
-      "Designed to evolve into a polished audio experience.",
+      "Persistent bottom playback bar with play/pause, next/previous, progress seek, volume, mute, shuffle, and repeat modes.",
+      "Zustand-powered player state with a hidden HTML audio component handling actual playback.",
+      "Liked Songs page, heart buttons, favorites store, favorite stats, and auto-synced Liked Songs playlist.",
+      "Playlist CRUD with create, edit, delete, public/private visibility, add/remove songs, and protection for the special Liked Songs playlist.",
+      "Home dashboard sections for featured songs, trending songs, Made For You, recently played tracks, and browse albums.",
+      "Socket.io activity broadcasting so friends can see the currently playing song in real time.",
+      "User profile integration, user search by name or handle, and settings for audio quality, playback, and privacy.",
     ],
     challenges: [
-      "The final feature set is still being prepared.",
-      "The project needs a clean structure for music discovery, playback, and content presentation.",
-      "Future UI work should balance visual richness with simple listening controls.",
+      "Keeping player state synchronized across the bottom player, song cards, queues, playlists, and route changes.",
+      "Implementing shuffle in a way that truly randomizes the queue while still allowing the original order to be restored.",
+      "Syncing likes, favorite stats, and the special Liked Songs playlist without creating inconsistent UI states.",
+      "Broadcasting listening activity in real time without making normal playback interactions feel delayed.",
+      "Coordinating frontend and backend features inside a group project with shared ownership boundaries.",
     ],
     future:
-      "Add live deployment, screenshots, player features, playlist support, search, favorite tracks, and a complete technical write-up.",
+      "Polish production deployment, add stronger music recommendation logic, improve mobile listening layouts, expand analytics for listening history, and refine real-time social features such as chat and friend activity.",
   },
   {
     slug: "bangla-dyslexia-llm-thesis",
@@ -107,12 +112,14 @@ const projects = [
       "Surface-controlled evaluation design for lexical representation probing.",
       "Low-resource Bangla dyslexia screening research direction.",
       "Cross-lingual analysis of multilingual large language models.",
-      "Research framing that connects NLP, accessibility, and language technology.",
+      "Research framing that connects NLP, accessibility, cognitive screening, and Bangla language technology.",
+      "Published paper link section included for future publication update.",
     ],
     challenges: [
       "Controlling surface-level word effects while still evaluating lexical representation quality.",
       "Working in a low-resource Bangla context where ready-made datasets and benchmarks are limited.",
       "Connecting linguistic evaluation, model analysis, and assistive screening goals in one thesis direction.",
+      "Keeping the evaluation methodology explainable enough for both NLP-focused readers and accessibility-focused readers.",
     ],
     future:
       "Expand the evaluation dataset, compare more multilingual LLMs, add clearer visual analytics, and explore a practical screening interface for educators and researchers.",
@@ -135,12 +142,14 @@ const projects = [
       "Role-based rescue workflow for victims, volunteers, NGOs, and admins.",
       "Dashboard UI with operational stats, filters, and map markers.",
       "Frontend integration with backend REST APIs.",
-      "Emergency coordination features including SOS, tasks, camps, inventory, and notifications.",
+      "Emergency coordination modules for SOS requests, volunteer tasks, NGO inventory, relief camps, aid distribution, notifications, incidents, and analytics.",
+      "MVC backend structure with JWT/RBAC, Mongoose models, media upload support, and role-protected routes.",
     ],
     challenges: [
       "Keeping map state, filters, markers, and backend data synchronized cleanly.",
       "Designing dashboard screens that stay readable during emergency-style workflows.",
       "Coordinating frontend integration inside a team project with multiple roles and feature areas.",
+      "Representing emergency locations and operational status clearly without overwhelming the map UI.",
     ],
     future:
       "Improve real-time tracking, add stronger notification flows, refine analytics, and add better mobile support for responders in the field.",
@@ -164,11 +173,14 @@ const projects = [
       "Issue creation, listing, single issue details, update, and delete flows.",
       "Filtering by issue type and status, plus newest/oldest sorting.",
       "Maintainer-only basic system metrics endpoint.",
+      "PostgreSQL schema with users and issues tables, unique emails, reporter ownership, status/type fields, and timestamps.",
+      "Consistent success/error JSON responses for API consumers.",
     ],
     challenges: [
       "Designing secure role-based access for contributor and maintainer actions.",
       "Writing raw SQL queries while keeping API responses consistent and predictable.",
       "Structuring filters, sorting, validation, and protected routes cleanly in TypeScript.",
+      "Deploying the backend with environment-based database credentials and production build/start commands.",
     ],
     future:
       "Add frontend dashboard screens, stronger validation, pagination, email notifications, API documentation, and richer maintainer analytics.",
@@ -192,11 +204,15 @@ const projects = [
       "Custom overlay position, color, opacity, spacing, and font size.",
       "Tray-friendly behavior with keyboard toggle support.",
       "Portable EXE and installer-ready deliverables.",
+      "Temperature source detection that prefers reliable CPU package/Tdie/Core Max sensors and shows detected sensor names.",
+      "Settings stored locally as JSON under the user's app data folder.",
     ],
     challenges: [
       "Collecting FPS and hardware sensor values reliably across different Windows machines.",
       "Handling missing hardware sensors without showing misleading temperature data.",
       "Making the overlay configurable while keeping the on-screen display minimal and clean.",
+      "Avoiding unsafe game injection by relying on PresentMon/ETW instead of DLL injection.",
+      "Accounting for anti-cheat, exclusive fullscreen, administrator permission, and unsupported laptop sensor cases.",
     ],
     future:
       "Add preset profiles, richer tray controls, export/import settings, per-game profiles, and more polished installer flows.",
@@ -217,14 +233,19 @@ const projects = [
     features: [
       "mpv-backed local video and audio playback.",
       "YouTube and URL playback with yt-dlp support.",
-      "Playlist panel, resume position history, and keyboard shortcuts.",
-      "Subtitle loading, audio/subtitle track menus, and screenshot capture.",
+      "Playlist panel with add, remove, select, next, previous, and shuffle-ready logic.",
+      "Resume position history stored in SQLite and restored across sessions.",
+      "Subtitle loading, audio/subtitle track menus, online subtitle finder, and external subtitle support.",
+      "Screenshot capture with timestamped filenames.",
+      "A-B loop controls, speed cycling, fit/cover fullscreen modes, drag-and-drop support, and always-on-top toggle.",
       "Frameless Windows 11-style dark UI with overlay playback controls.",
     ],
     challenges: [
       "Combining a native-feeling PyQt interface with mpv-backed playback controls.",
       "Managing playlist state, resume history, subtitles, and screenshots without making the UI feel heavy.",
       "Supporting both local media and URL playback in a consistent flow.",
+      "Keeping keyboard shortcuts, overlay controls, and fullscreen behavior predictable in a frameless desktop window.",
+      "Handling local setup requirements such as mpv-2.dll while keeping the run flow simple for Windows users.",
     ],
     future:
       "Improve picture-in-picture, refine subtitle discovery, add theme options, and package the app for easier installation.",
@@ -235,7 +256,7 @@ const projects = [
     eyebrow: "3D Game",
     imageType: "game",
     role: "Game developer",
-    stack: ["3D Game Development", "Interactive Gameplay", "Level Design", "Game Logic"],
+    stack: ["3D Game Development", "Interactive Gameplay", "Tree Watering Mechanics", "Level Design", "Game Logic"],
     description:
       "A 3D game project centered on tree watering gameplay, environmental interaction, and objective-based mechanics.",
     summary:
@@ -243,15 +264,16 @@ const projects = [
     live: "",
     github: "https://github.com/SayemHasan74/GameProject",
     features: [
-      "3D environment interaction and movement.",
-      "Tree watering objective loop.",
-      "Basic gameplay feedback and task completion logic.",
-      "Foundation for levels, scoring, and environmental polish.",
+      "3D tree watering game concept based on a simple environmental objective.",
+      "Player movement and interaction loop centered around locating and watering trees.",
+      "Task-based gameplay foundation that can be expanded into levels, scoring, and progression.",
+      "Small, focused game idea that keeps the objective understandable for players.",
     ],
     challenges: [
-      "Designing clear 3D interactions around a simple objective.",
-      "Balancing gameplay feedback so the player understands progress and task completion.",
-      "Organizing game logic for movement, interaction, and environment behavior.",
+      "Designing clear 3D interactions around a simple tree-watering objective.",
+      "Making the player understand when they are close enough to interact with a tree.",
+      "Organizing movement, interaction, and objective-completion logic so the game can grow later.",
+      "Keeping the scope realistic because the public README currently documents only the core tree-watering idea.",
     ],
     future:
       "Add stronger visuals, sound feedback, more levels, scoring, progression, and a clearer game menu flow.",
@@ -524,8 +546,8 @@ function ProjectVisual({ project }) {
       {project.imageType === "music" && (
         <>
           <BookOpen size={44} />
-          <span>Music experience</span>
-          <strong>Amar Gan</strong>
+          <span>Full-stack streaming app</span>
+          <strong>SoundSip</strong>
         </>
       )}
     </div>
