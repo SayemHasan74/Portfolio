@@ -537,6 +537,10 @@ h3 {
   background: linear-gradient(135deg, #251535, #9f3f6d 58%, #f6b84b);
 }
 
+.visual-card.api {
+  background: linear-gradient(135deg, #10233f, #1f4f8b 52%, #0f766e);
+}
+
 .contact-section {
   padding-bottom: 72px;
 }

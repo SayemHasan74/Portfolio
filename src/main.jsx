@@ -119,6 +119,34 @@ const projects = [
       "Improve real-time tracking, add stronger notification flows, refine analytics, and add better mobile support for responders in the field.",
   },
   {
+    slug: "devpulse-issue-tracker-api",
+    name: "DevPulse Issue Tracker API",
+    eyebrow: "Backend API",
+    imageType: "api",
+    role: "Backend developer",
+    stack: ["Node.js", "TypeScript", "Express.js", "PostgreSQL", "JWT", "bcrypt", "Raw SQL"],
+    description:
+      "A backend API project for an internal issue tracker with authentication, roles, issue management, filtering, sorting, and system metrics.",
+    summary:
+      "DevPulse is a production-deployed backend API for issue tracking. Users can register and log in, contributors can create and update their own open issues, maintainers can manage issues, and everyone can view issue lists and details with filtering and sorting support.",
+    live: "https://devpulse-o72j.onrender.com/",
+    github: "https://github.com/SayemHasan74/devpulse",
+    features: [
+      "User registration and login with hashed passwords.",
+      "JWT authentication with contributor and maintainer roles.",
+      "Issue creation, listing, single issue details, update, and delete flows.",
+      "Filtering by issue type and status, plus newest/oldest sorting.",
+      "Maintainer-only basic system metrics endpoint.",
+    ],
+    challenges: [
+      "Designing secure role-based access for contributor and maintainer actions.",
+      "Writing raw SQL queries while keeping API responses consistent and predictable.",
+      "Structuring filters, sorting, validation, and protected routes cleanly in TypeScript.",
+    ],
+    future:
+      "Add frontend dashboard screens, stronger validation, pagination, email notifications, API documentation, and richer maintainer analytics.",
+  },
+  {
     slug: "pulse-overlay-stats-checker",
     name: "Pulse Overlay Stats Checker",
     eyebrow: "Windows Performance Tool",
@@ -482,6 +510,13 @@ function ProjectVisual({ project }) {
           <Rocket size={44} />
           <span>Interactive 3D objective</span>
           <strong>Tree Watering Game</strong>
+        </>
+      )}
+      {project.imageType === "api" && (
+        <>
+          <Target size={44} />
+          <span>JWT issue tracker API</span>
+          <strong>DevPulse Backend</strong>
         </>
       )}
       {project.imageType === "music" && (
