@@ -62,6 +62,33 @@ const skills = [
 
 const projects = [
   {
+    slug: "soundsip",
+    name: "SoundSip",
+    eyebrow: "Music App",
+    imageType: "music",
+    role: "Full project builder",
+    stack: ["Frontend", "Media UI", "Audio Experience", "Music Discovery", "Project details to be updated"],
+    description:
+      "A music-focused application project prepared for a polished listening, discovery, and playlist experience.",
+    summary:
+      "SoundSip is a music app project focused on creating a smooth and modern media experience. The portfolio entry is ready for future screenshots, live deployment, playback features, playlist details, and a complete technical write-up as the project grows.",
+    live: "",
+    github: "https://github.com/SayemHasan74/SoundSip",
+    features: [
+      "Music app project with a ready portfolio detail page.",
+      "Prepared structure for media playback, playlists, discovery, and screenshots.",
+      "GitHub repository connected for future updates.",
+      "Designed to evolve into a polished audio experience.",
+    ],
+    challenges: [
+      "The final feature set is still being prepared.",
+      "The project needs a clean structure for music discovery, playback, and content presentation.",
+      "Future UI work should balance visual richness with simple listening controls.",
+    ],
+    future:
+      "Add live deployment, screenshots, player features, playlist support, search, favorite tracks, and a complete technical write-up.",
+  },
+  {
     slug: "bangla-dyslexia-llm-thesis",
     name: "Bangla Dyslexia Screening Research",
     eyebrow: "NLP / LLM Thesis",
@@ -228,31 +255,6 @@ const projects = [
     ],
     future:
       "Add stronger visuals, sound feedback, more levels, scoring, progression, and a clearer game menu flow.",
-  },
-  {
-    slug: "amar-gan",
-    name: "Amar Gan",
-    eyebrow: "Music Project",
-    imageType: "music",
-    role: "Planned builder",
-    stack: ["Frontend", "Media UI", "Audio Experience", "Project details to be updated"],
-    description:
-      "A music-focused project entry prepared for future updates as the repository, screenshots, and live link become ready.",
-    summary:
-      "This portfolio keeps Amar Gan as a ready project slot so it can later become a full music experience with playback, playlists, search, and a polished content interface. The detailed page is already structured for future screenshots, links, and feature notes.",
-    live: "",
-    github: "",
-    features: [
-      "Prepared portfolio entry for a future music platform.",
-      "Ready structure for screenshots, repository link, live link, and full feature list.",
-      "Planned focus on media UI, playback experience, and music discovery.",
-    ],
-    challenges: [
-      "The final feature set is still being prepared.",
-      "The project needs a clean structure for music discovery, playback, and content presentation.",
-    ],
-    future:
-      "Add the repository, live deployment, screenshots, player features, playlists, and a complete technical write-up.",
   },
 ];
 
