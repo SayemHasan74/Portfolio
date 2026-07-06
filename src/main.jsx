@@ -282,6 +282,7 @@ const projects = [
 
 const navItems = [
   ["Home", "home"],
+  ["About", "about"],
   ["Projects", "projects"],
   ["Skills", "skills"],
   ["Education", "education"],
@@ -325,6 +326,7 @@ function App() {
       <Navbar menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
       <main>
         <Hero />
+        <About />
         <Projects />
         <Skills />
         <Education />
@@ -394,6 +396,60 @@ function useProjectFromPath() {
 }
 
 function BackgroundEffects() {
+  useEffect(() => {
+    const particles = [...document.querySelectorAll(".particle-field span")];
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduceMotion || particles.length === 0) return;
+
+    let frame = 0;
+    let mouseX = -9999;
+    let mouseY = -9999;
+
+    const updateParticles = () => {
+      frame = 0;
+      particles.forEach((particle) => {
+        const rect = particle.getBoundingClientRect();
+        const cx = rect.left + rect.width / 2;
+        const cy = rect.top + rect.height / 2;
+        const x = cx - mouseX;
+        const y = cy - mouseY;
+        const distance = Math.hypot(x, y);
+        const radius = 150;
+
+        if (distance > radius || distance === 0) {
+          particle.style.setProperty("--push-x", "0px");
+          particle.style.setProperty("--push-y", "0px");
+          return;
+        }
+
+        const force = (1 - distance / radius) * 46;
+        particle.style.setProperty("--push-x", `${(x / distance) * force}px`);
+        particle.style.setProperty("--push-y", `${(y / distance) * force}px`);
+      });
+    };
+
+    const requestUpdate = (event) => {
+      mouseX = event.clientX;
+      mouseY = event.clientY;
+      if (!frame) frame = window.requestAnimationFrame(updateParticles);
+    };
+
+    const resetParticles = () => {
+      mouseX = -9999;
+      mouseY = -9999;
+      if (!frame) frame = window.requestAnimationFrame(updateParticles);
+    };
+
+    window.addEventListener("pointermove", requestUpdate, { passive: true });
+    window.addEventListener("pointerleave", resetParticles);
+
+    return () => {
+      window.removeEventListener("pointermove", requestUpdate);
+      window.removeEventListener("pointerleave", resetParticles);
+      if (frame) window.cancelAnimationFrame(frame);
+    };
+  }, []);
+
   return (
     <>
       <div className="space-light" aria-hidden="true"></div>
@@ -401,11 +457,11 @@ function BackgroundEffects() {
         {Array.from({ length: 76 }).map((_, index) => {
           const x = (index * 37) % 100;
           const y = (index * 61) % 100;
-          const size = 1 + (index % 4) * 0.55;
-          const duration = 7 + (index % 9);
+          const size = 1.2 + (index % 4) * 0.62;
+          const duration = 4.8 + (index % 8);
           const delay = -1 * ((index * 0.47) % 10);
-          const dx = -45 + (index % 8) * 24;
-          const dy = -80 - (index % 7) * 24;
+          const dx = -70 + (index % 8) * 31;
+          const dy = -120 - (index % 7) * 34;
 
           return (
             <span
@@ -529,17 +585,20 @@ function ActivityStrip() {
 
 function About() {
   return (
-    <section id="about" className="section split-section reveal">
+    <section id="about" className="section about-section reveal">
       <div>
         <p className="section-kicker">About Me</p>
-        <h2>Curious about code, AI, and systems that actually help people.</h2>
+        <h2>Full-stack builder, research-minded teammate, and lifelong space enthusiast.</h2>
       </div>
-      <div className="prose rich-panel">
+      <div className="about-panel">
         <p>
-          My programming journey has grown from learning web fundamentals into building full stack applications, desktop tools, dashboards, and research-driven AI work. I enjoy the point where an idea becomes useful: an API returns the right data, a map interaction becomes clear, or an evaluation reveals how a language model is behaving.
+          I build full-stack applications, backend APIs, dashboards, desktop tools, and research-driven software. My strongest interests sit around Bangla NLP, multilingual LLMs, and practical systems that turn technical ideas into something people can actually use.
         </p>
         <p>
-          I enjoy backend API work, frontend interfaces, and deeper AI topics like NLP, LLM behavior, cross-lingual representations, Bangla language technology, and neural approaches to language understanding. Outside programming, I love heavy travelling and I am a regular football player.
+          I have worked on team projects and genuinely enjoy collaborative development. I am comfortable coordinating feature work, communicating clearly, managing shared responsibilities, and helping a team keep momentum from idea to delivery.
+        </p>
+        <p>
+          Outside the usual code and research loop, I am also enthusiastic about astronomy and space. That curiosity shapes the way I like to explore systems: patiently, experimentally, and with attention to patterns.
         </p>
       </div>
     </section>
@@ -614,7 +673,6 @@ function Projects() {
       <div className="project-grid">
         {projects.map((project, index) => (
           <article className="project-card lift-card" key={project.slug}>
-            <ProjectVisual project={project} />
             <div className="project-card-body">
               <p className="card-eyebrow">Fig. {index + 1} - {project.eyebrow}</p>
               <p className="project-status">{project.live ? "Shipped" : project.github ? "Documented" : "In progress"}</p>
@@ -625,9 +683,24 @@ function Projects() {
                   <span key={item}>{item}</span>
                 ))}
               </div>
-              <a className="details-link" href={`/projects/${project.slug}`}>
-                View Details <ArrowRight size={17} />
-              </a>
+              <div className="project-card-actions">
+                <a className="details-link" href={`/projects/${project.slug}`}>
+                  More Details <ArrowRight size={17} />
+                </a>
+                {project.live && (
+                  <a className="details-link live-link" href={project.live} target="_blank" rel="noreferrer">
+                    Live <ExternalLink size={16} />
+                  </a>
+                )}
+                {project.github && (
+                  <a className="details-link github-link" href={project.github} target="_blank" rel="noreferrer">
+                    GitHub <Github size={16} />
+                  </a>
+                )}
+              </div>
+            </div>
+            <div className="project-visual-wrap">
+              <ProjectVisual project={project} />
             </div>
           </article>
         ))}
@@ -714,14 +787,14 @@ function ProjectPage({ project }) {
             <p>{project.summary}</p>
             <div className="project-actions">
               {project.live ? (
-                <a className="primary-button" href={project.live} target="_blank" rel="noreferrer">
+                <a className="primary-button live-link" href={project.live} target="_blank" rel="noreferrer">
                   Live Project <ExternalLink size={18} />
                 </a>
               ) : (
                 <span className="disabled-pill">Live link coming soon</span>
               )}
               {project.github ? (
-                <a className="secondary-button" href={project.github} target="_blank" rel="noreferrer">
+                <a className="secondary-button github-link" href={project.github} target="_blank" rel="noreferrer">
                   GitHub Repository <Github size={18} />
                 </a>
               ) : (
