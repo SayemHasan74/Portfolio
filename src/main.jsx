@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { createRoot } from "react-dom/client";
 import {
   Activity,
@@ -282,10 +282,9 @@ const projects = [
 
 const navItems = [
   ["Home", "home"],
-  ["About", "about"],
+  ["Projects", "projects"],
   ["Skills", "skills"],
   ["Education", "education"],
-  ["Projects", "projects"],
   ["Contact", "contact"],
 ];
 
@@ -300,20 +299,35 @@ function App() {
   const [menuOpen, setMenuOpen] = useState(false);
   const project = useProjectFromPath();
   const isResume = window.location.pathname === "/resume";
+  useDynamicPageEffects();
 
-  if (project) return <ProjectPage project={project} />;
-  if (isResume) return <ResumePage />;
+  if (project) {
+    return (
+      <>
+        <BackgroundEffects />
+        <ProjectPage project={project} />
+      </>
+    );
+  }
+
+  if (isResume) {
+    return (
+      <>
+        <BackgroundEffects />
+        <ResumePage />
+      </>
+    );
+  }
 
   return (
     <>
+      <BackgroundEffects />
       <Navbar menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
       <main>
         <Hero />
-        <ActivityStrip />
-        <About />
+        <Projects />
         <Skills />
         <Education />
-        <Projects />
         <Contact />
       </main>
       <Footer />
@@ -321,11 +335,96 @@ function App() {
   );
 }
 
+function useDynamicPageEffects() {
+  useEffect(() => {
+    const revealItems = document.querySelectorAll(
+      ".reveal, .project-card, .stack-row, .season-timeline article, .contact-list a, .research-chips span, .hero-actions a"
+    );
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-visible");
+          }
+        });
+      },
+      { threshold: 0.16, rootMargin: "0px 0px -8% 0px" }
+    );
+
+    revealItems.forEach((item, index) => {
+      item.style.setProperty("--reveal-delay", `${Math.min(index % 9, 8) * 70}ms`);
+      observer.observe(item);
+    });
+
+    const timeline = document.querySelector(".season-timeline");
+    const timelineItems = timeline ? [...timeline.querySelectorAll("article")] : [];
+
+    const updateTimeline = () => {
+      if (!timeline) return;
+
+      const rect = timeline.getBoundingClientRect();
+      const viewportAnchor = window.innerHeight * 0.48;
+      const progress = Math.min(1, Math.max(0, (viewportAnchor - rect.top) / Math.max(rect.height, 1)));
+      timeline.style.setProperty("--timeline-progress", `${progress * 100}%`);
+
+      timelineItems.forEach((item) => {
+        const itemRect = item.getBoundingClientRect();
+        item.classList.toggle("is-active", itemRect.top < viewportAnchor);
+      });
+    };
+
+    updateTimeline();
+    window.addEventListener("scroll", updateTimeline, { passive: true });
+    window.addEventListener("resize", updateTimeline);
+
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("scroll", updateTimeline);
+      window.removeEventListener("resize", updateTimeline);
+    };
+  }, []);
+}
+
 function useProjectFromPath() {
   return useMemo(() => {
     const match = window.location.pathname.match(/^\/projects\/([^/]+)/);
     return match ? projects.find((item) => item.slug === match[1]) : null;
   }, []);
+}
+
+function BackgroundEffects() {
+  return (
+    <>
+      <div className="space-light" aria-hidden="true"></div>
+      <div className="particle-field" aria-hidden="true">
+        {Array.from({ length: 76 }).map((_, index) => {
+          const x = (index * 37) % 100;
+          const y = (index * 61) % 100;
+          const size = 1 + (index % 4) * 0.55;
+          const duration = 7 + (index % 9);
+          const delay = -1 * ((index * 0.47) % 10);
+          const dx = -45 + (index % 8) * 24;
+          const dy = -80 - (index % 7) * 24;
+
+          return (
+            <span
+              key={index}
+              style={{
+                "--x": `${x}%`,
+                "--y": `${y}%`,
+                "--s": `${size}px`,
+                "--d": `${duration}s`,
+                "--delay": `${delay}s`,
+                "--dx": `${dx}px`,
+                "--dy": `${dy}px`,
+              }}
+            />
+          );
+        })}
+      </div>
+    </>
+  );
 }
 
 function Navbar({ menuOpen, setMenuOpen }) {
@@ -360,8 +459,20 @@ function Hero() {
   return (
     <section id="home" className="hero section">
       <div className="hero-copy reveal">
-        <p className="eyebrow">Full Stack Developer - AI, NLP & LLM Enthusiast</p>
-        <h1>Hi, I am Hasan Mohammad Sayem.</h1>
+        <h1>{profile.name}</h1>
+        <p className="hero-lede">Full-stack developer working where multilingual NLP research meets shipped software.</p>
+        <div className="abstract-block">
+          <span>Abstract</span>
+          <p>
+            I study how multilingual language models represent low-resource languages, and build the systems around those ideas:
+            backend APIs, dashboards, desktop tools, and production interfaces that move research into usable software.
+          </p>
+        </div>
+        <div className="research-chips">
+          <span>BRAC University - CSE</span>
+          <span>Dhaka, Bangladesh</span>
+          <span>NLP - Backend - Web</span>
+        </div>
         <p className="hero-text">
           I build full stack applications, AI-focused experiments, research tools, dashboards, and desktop utilities. My favorite work sits between strong backend logic, clean user experience, and deep NLP/LLM ideas.
         </p>
@@ -389,13 +500,13 @@ function Hero() {
         </div>
       </div>
       <div className="hero-stage reveal">
-        <div className="hero-photo-wrap">
-          <img src="/assets/hasan-sayem.png" alt="Hasan Mohammad Sayem" className="hero-photo" />
-        </div>
-        <div className="floating-panel">
-          <Activity size={18} />
-          <span>Currently exploring</span>
-          <strong>NLP, LLMs, APIs</strong>
+        <div className="hero-figure-card">
+          <div className="hero-photo-wrap">
+            <img src="/assets/hasan-sayem.png" alt="Hasan Mohammad Sayem" className="hero-photo" />
+          </div>
+          <p className="figure-caption">
+            <strong>Fig. 0.</strong> Hasan Mohammad Sayem - full-stack engineering, Bangla NLP research, backend APIs, and product interfaces.
+          </p>
         </div>
       </div>
     </section>
@@ -438,17 +549,20 @@ function About() {
 function Skills() {
   return (
     <section id="skills" className="section reveal">
-      <div className="section-heading">
-        <p className="section-kicker">Skills</p>
-        <h2>Technical toolkit</h2>
+      <div className="numbered-heading">
+        <span>02</span>
+        <h2>The stack that starts every match</h2>
       </div>
-      <div className="skills-grid">
-        {skills.map((group) => {
+      <div className="stack-list">
+        {skills.map((group, index) => {
           const Icon = group.icon;
           return (
-            <article className="skill-card lift-card" key={group.title}>
-              <div className="skill-icon"><Icon /></div>
-              <h3>{group.title}</h3>
+            <article className="stack-row" key={group.title}>
+              <span className="stack-index">0{index + 1}</span>
+              <div className="stack-title">
+                <Icon size={18} />
+                <strong>{group.title}</strong>
+              </div>
               <div className="chips">
                 {group.items.map((skill) => (
                   <span key={skill}>{skill}</span>
@@ -464,22 +578,28 @@ function Skills() {
 
 function Education() {
   return (
-    <section id="education" className="section split-section education-band reveal">
-      <div>
-        <p className="section-kicker">Education</p>
-        <h2>Academic background</h2>
+    <section id="education" className="section season-section reveal">
+      <div className="numbered-heading">
+        <span>03 - Season Timeline</span>
+        <h2>How the season's gone</h2>
       </div>
-      <article className="timeline-card lift-card">
-        <GraduationCap size={28} />
-        <div>
+      <div className="season-timeline">
+        <article>
+          <span>Spring 2026</span>
+          <h3>B.Sc. Thesis</h3>
+          <p>Probing Cross-Lingual Lexical Representations in Multilingual LLMs for Bangla Dyslexia Screening.</p>
+        </article>
+        <article>
+          <span>2026</span>
+          <h3>Full-stack and research projects</h3>
+          <p>Shipping APIs, dashboards, desktop tools, music platforms, and emergency response interfaces.</p>
+        </article>
+        <article>
+          <span>2022 - 2026</span>
           <h3>BSc in Computer Science and Engineering</h3>
-          <p>BRAC University</p>
-          <p>Passing Year: 2026</p>
-          <p className="muted">
-            Thesis: Probing Cross-Lingual Lexical Representations in Multilingual Large Language Models: A Surface-Controlled Evaluation for Low-Resource Bangla Dyslexia Screening.
-          </p>
-        </div>
-      </article>
+          <p>BRAC University, Dhaka. Coursework across NLP, databases, systems, software design, and web interfaces.</p>
+        </article>
+      </div>
     </section>
   );
 }
@@ -487,16 +607,17 @@ function Education() {
 function Projects() {
   return (
     <section id="projects" className="section reveal">
-      <div className="section-heading">
-        <p className="section-kicker">Projects</p>
-        <h2>Selected work</h2>
+      <div className="numbered-heading">
+        <span>01</span>
+        <h2>Contributions</h2>
       </div>
       <div className="project-grid">
-        {projects.map((project) => (
+        {projects.map((project, index) => (
           <article className="project-card lift-card" key={project.slug}>
             <ProjectVisual project={project} />
             <div className="project-card-body">
-              <p className="card-eyebrow">{project.eyebrow}</p>
+              <p className="card-eyebrow">Fig. {index + 1} - {project.eyebrow}</p>
+              <p className="project-status">{project.live ? "Shipped" : project.github ? "Documented" : "In progress"}</p>
               <h3>{project.name}</h3>
               <p>{project.description}</p>
               <div className="mini-feature-row">
@@ -557,25 +678,24 @@ function ProjectVisual({ project }) {
 function Contact() {
   return (
     <section id="contact" className="section contact-section reveal">
-      <div className="section-heading">
-        <p className="section-kicker">Contact</p>
-        <h2>Let us build something useful.</h2>
+      <div className="appendix">
+        <div className="numbered-heading">
+          <span>04</span>
+          <h2>Appendix</h2>
+        </div>
+        <p><sup>1</sup> Off the clock: football, travelling, and turning small ideas into useful software.</p>
+        <p><sup>2</sup> Also builds desktop tools, dashboards, media players, overlays, and backend APIs.</p>
       </div>
-      <div className="contact-grid">
-        <a href={`mailto:${profile.email}`} className="contact-card lift-card">
-          <Mail />
-          <span>Email</span>
-          <strong>{profile.email}</strong>
-        </a>
-        <a href={`tel:${profile.phone}`} className="contact-card lift-card">
-          <Phone />
-          <span>Phone / WhatsApp</span>
-          <strong>{profile.phone}</strong>
-        </a>
-        <div className="contact-card lift-card">
-          <MapPin />
-          <span>Location</span>
-          <strong>{profile.location}</strong>
+      <div className="correspondence">
+        <div>
+          <h2>Correspondence</h2>
+          <p>Open to research collaborations, internships, backend/API work, and interesting full-stack projects. The fastest way to reach me is email.</p>
+        </div>
+        <div className="contact-list">
+          <a href={`mailto:${profile.email}`}><span>Email</span><strong>{profile.email}</strong></a>
+          <a href={profile.github} target="_blank" rel="noreferrer"><span>GitHub</span><strong>github.com/SayemHasan74</strong></a>
+          <a href={`tel:${profile.phone}`}><span>Phone</span><strong>{profile.phone}</strong></a>
+          <a href="/Hasan-Mohammad-Sayem-Resume.pdf" download><span>Resume</span><strong>Download PDF</strong></a>
         </div>
       </div>
     </section>

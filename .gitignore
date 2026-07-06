@@ -5,3 +5,4 @@ tmp
 .env.local
 .vercel
 .DS_Store
+research-style-preview.html

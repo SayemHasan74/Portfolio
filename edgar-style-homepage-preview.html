@@ -1,0 +1,628 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hasan Mohammad Sayem - Dark Dynamic Homepage Preview</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #030303;
+        --panel: rgba(255, 255, 255, 0.055);
+        --panel-strong: rgba(255, 255, 255, 0.105);
+        --line: rgba(255, 255, 255, 0.105);
+        --line-hot: rgba(255, 255, 255, 0.42);
+        --text: #f4f4f4;
+        --soft: #c9c9c9;
+        --muted: #737373;
+        --blue: #168dff;
+        --pink: #ff7b9d;
+        --green: #88ffdf;
+        --font: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        min-width: 320px;
+        min-height: 100vh;
+        margin: 0;
+        overflow-x: hidden;
+        background:
+          radial-gradient(circle at 50% 45%, rgba(255, 255, 255, 0.09), transparent 19rem),
+          radial-gradient(circle at 78% 68%, rgba(22, 141, 255, 0.06), transparent 20rem),
+          radial-gradient(circle at 22% 76%, rgba(255, 123, 157, 0.055), transparent 18rem),
+          var(--bg);
+        color: var(--text);
+        font-family: var(--font);
+      }
+
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        background-image:
+          radial-gradient(circle, rgba(255, 255, 255, 0.7) 0 1px, transparent 1.5px),
+          radial-gradient(circle, rgba(255, 255, 255, 0.38) 0 1px, transparent 1.5px);
+        background-position: 8% 14%, 34% 88%;
+        background-size: 137px 149px, 211px 193px;
+        mask-image: linear-gradient(180deg, black, black 86%, transparent);
+        opacity: 0.4;
+        animation: starDrift 18s linear infinite;
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      .space-light {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        overflow: hidden;
+      }
+
+      .space-light::before,
+      .space-light::after {
+        content: "";
+        position: absolute;
+        width: 38vw;
+        height: 38vw;
+        border-radius: 50%;
+        filter: blur(96px);
+        opacity: 0.14;
+        animation: auraMove 13s ease-in-out infinite alternate;
+      }
+
+      .space-light::before {
+        left: 7%;
+        top: 30%;
+        background: var(--blue);
+      }
+
+      .space-light::after {
+        right: 6%;
+        bottom: 14%;
+        background: var(--pink);
+        animation-delay: -6s;
+      }
+
+      .particle-field {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        overflow: hidden;
+        z-index: 0;
+      }
+
+      .particle-field span {
+        position: absolute;
+        left: var(--x);
+        top: var(--y);
+        width: var(--s);
+        height: var(--s);
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.72);
+        box-shadow: 0 0 12px rgba(255, 255, 255, 0.48);
+        opacity: var(--o);
+        animation:
+          particleFloat var(--d) linear infinite,
+          particlePulse 2.8s ease-in-out infinite alternate;
+        animation-delay: var(--delay), var(--pulse-delay);
+      }
+
+      .shell {
+        position: relative;
+        z-index: 1;
+        width: min(1180px, calc(100% - 36px));
+        margin: 0 auto;
+      }
+
+      .nav {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        min-height: 72px;
+        color: var(--muted);
+        font-size: 0.78rem;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .nav strong {
+        color: var(--text);
+      }
+
+      .nav-links {
+        display: flex;
+        gap: 24px;
+      }
+
+      .hero {
+        display: grid;
+        place-items: center;
+        min-height: calc(100vh - 72px);
+        padding: 62px 0 108px;
+        text-align: center;
+      }
+
+      .status-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        min-height: 34px;
+        margin-bottom: 28px;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        padding: 0 15px;
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.025));
+        color: var(--soft);
+        box-shadow: inset 0 0 18px rgba(255, 255, 255, 0.04);
+        font-size: 0.78rem;
+        font-weight: 800;
+      }
+
+      .status-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: var(--green);
+        box-shadow: 0 0 18px var(--green);
+      }
+
+      h1 {
+        max-width: 980px;
+        margin: 0 auto;
+        font-size: clamp(3.8rem, 8.5vw, 8.8rem);
+        font-weight: 500;
+        letter-spacing: -0.055em;
+        line-height: 0.86;
+      }
+
+      .dim {
+        color: rgba(255, 255, 255, 0.42);
+      }
+
+      .lead {
+        max-width: 720px;
+        margin: 30px auto 0;
+        color: var(--soft);
+        font-size: clamp(1rem, 2vw, 1.32rem);
+        line-height: 1.65;
+      }
+
+      .actions {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 14px;
+        margin-top: 28px;
+      }
+
+      .button {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 9px;
+        min-height: 50px;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        padding: 0 22px;
+        overflow: hidden;
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.115), rgba(255, 255, 255, 0.025));
+        color: #f7f7f7;
+        box-shadow:
+          inset 0 0 22px rgba(255, 255, 255, 0.06),
+          0 0 34px rgba(255, 255, 255, 0.055);
+        font-size: 0.95rem;
+        font-weight: 900;
+      }
+
+      .button.primary {
+        border-color: rgba(255, 255, 255, 0.34);
+        box-shadow:
+          inset 0 0 22px rgba(255, 255, 255, 0.08),
+          -12px 0 24px rgba(22, 141, 255, 0.32),
+          12px 0 24px rgba(255, 123, 157, 0.2);
+      }
+
+      .button::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        transform: translateX(-125%);
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.42), transparent);
+        animation: sheen 4.8s ease-in-out infinite;
+      }
+
+      .social {
+        width: 50px;
+        padding: 0;
+      }
+
+      .project-cloud {
+        width: min(1024px, 100%);
+        margin: 78px auto 0;
+      }
+
+      .cloud-title {
+        margin: 0 0 30px;
+        color: var(--text);
+        font-size: clamp(1.8rem, 3vw, 2.65rem);
+        font-weight: 600;
+        letter-spacing: -0.04em;
+      }
+
+      .cloud-title span {
+        color: rgba(255, 255, 255, 0.38);
+      }
+
+      .logo-grid {
+        position: relative;
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 8px;
+        border: 1px solid rgba(255, 255, 255, 0.075);
+        border-radius: 12px;
+        padding: 14px;
+        background:
+          linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.025)),
+          rgba(255, 255, 255, 0.035);
+        box-shadow: 0 24px 80px rgba(0, 0, 0, 0.62);
+        overflow: hidden;
+      }
+
+      .logo-grid::before {
+        content: "";
+        position: absolute;
+        top: -1px;
+        right: 38px;
+        z-index: 2;
+        width: 280px;
+        height: 4px;
+        border-radius: 999px;
+        background: #fff;
+        box-shadow:
+          0 0 8px #fff,
+          0 0 28px rgba(255, 255, 255, 0.98),
+          0 0 82px rgba(255, 255, 255, 0.82),
+          0 0 150px rgba(255, 255, 255, 0.56),
+          -90px 44px 130px rgba(255, 255, 255, 0.24);
+        animation: railGlow 4.8s ease-in-out infinite;
+      }
+
+      .logo-grid::after {
+        content: "";
+        position: absolute;
+        top: -62px;
+        right: -20px;
+        z-index: 0;
+        width: 420px;
+        height: 240px;
+        pointer-events: none;
+        background:
+          radial-gradient(ellipse at 62% 28%, rgba(255, 255, 255, 0.34), transparent 12%),
+          radial-gradient(ellipse at 58% 32%, rgba(255, 255, 255, 0.18), transparent 38%),
+          radial-gradient(ellipse at 50% 44%, rgba(255, 123, 157, 0.12), transparent 54%);
+        filter: blur(10px);
+        mix-blend-mode: screen;
+        opacity: 0.86;
+        animation: railAura 4.8s ease-in-out infinite;
+      }
+
+      .logo-card {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 68px;
+        border: 1px solid rgba(255, 255, 255, 0.065);
+        border-radius: 8px;
+        overflow: hidden;
+        background: rgba(12, 12, 12, 0.72);
+        color: rgba(255, 255, 255, 0.76);
+        font-size: clamp(1rem, 2vw, 1.35rem);
+        font-weight: 900;
+        letter-spacing: -0.04em;
+      }
+
+      .logo-card.wide {
+        grid-column: span 2;
+      }
+
+      .logo-card::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        opacity: 0;
+        background: radial-gradient(circle at var(--mx, 50%) var(--my, 50%), rgba(255, 255, 255, 0.22), transparent 38%);
+        transition: opacity 160ms ease;
+      }
+
+      .logo-card:hover::before {
+        opacity: 1;
+      }
+
+      .below {
+        display: grid;
+        grid-template-columns: 0.7fr 1fr;
+        gap: 20px;
+        padding: 0 0 84px;
+      }
+
+      .glass-panel {
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        padding: 26px;
+        background: rgba(255, 255, 255, 0.045);
+        box-shadow: inset 0 1px rgba(255, 255, 255, 0.08);
+      }
+
+      .glass-panel h2 {
+        margin: 0 0 14px;
+        font-size: clamp(1.6rem, 3vw, 2.35rem);
+        font-weight: 600;
+        letter-spacing: -0.04em;
+      }
+
+      .glass-panel p {
+        margin: 0;
+        color: var(--soft);
+        line-height: 1.72;
+      }
+
+      .stack-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 9px;
+        margin-top: 20px;
+      }
+
+      .stack-list span {
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 999px;
+        padding: 8px 12px;
+        background: rgba(255, 255, 255, 0.05);
+        color: rgba(255, 255, 255, 0.72);
+        font-size: 0.82rem;
+        font-weight: 800;
+      }
+
+      @keyframes starDrift {
+        from { transform: translate3d(0, 0, 0); }
+        to { transform: translate3d(96px, -124px, 0); }
+      }
+
+      @keyframes auraMove {
+        from { transform: translate3d(-24px, 20px, 0) scale(0.95); }
+        to { transform: translate3d(42px, -32px, 0) scale(1.1); }
+      }
+
+      @keyframes particleFloat {
+        from {
+          transform: translate3d(0, 0, 0) scale(0.82);
+        }
+        to {
+          transform: translate3d(var(--dx), var(--dy), 0) scale(1.2);
+        }
+      }
+
+      @keyframes particlePulse {
+        from {
+          opacity: 0.12;
+        }
+        to {
+          opacity: var(--o);
+        }
+      }
+
+      @keyframes sheen {
+        0%, 45% { transform: translateX(-125%); }
+        78%, 100% { transform: translateX(125%); }
+      }
+
+      @keyframes railGlow {
+        0%, 100% { transform: translateX(-360px); opacity: 0.08; }
+        34%, 68% { opacity: 1; }
+        50% { transform: translateX(0); }
+      }
+
+      @keyframes railAura {
+        0%, 100% { transform: translateX(-320px) scaleX(0.86); opacity: 0.08; }
+        34%, 68% { opacity: 0.9; }
+        50% { transform: translateX(0) scaleX(1); }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          scroll-behavior: auto !important;
+        }
+      }
+
+      @media (max-width: 820px) {
+        .nav {
+          align-items: flex-start;
+          flex-direction: column;
+          justify-content: center;
+          gap: 12px;
+          padding: 18px 0;
+        }
+
+        .nav-links {
+          gap: 14px;
+          font-size: 0.72rem;
+        }
+
+        .hero {
+          min-height: auto;
+          padding-top: 42px;
+        }
+
+        h1 {
+          font-size: clamp(3.4rem, 18vw, 5.6rem);
+        }
+
+        .logo-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .below {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 520px) {
+        .logo-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .logo-card.wide {
+          grid-column: auto;
+        }
+
+        .button {
+          width: 100%;
+        }
+
+        .social {
+          width: 50px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="space-light" aria-hidden="true"></div>
+    <div class="particle-field" aria-hidden="true"></div>
+
+    <div class="shell">
+      <header class="nav">
+        <strong>Hasan Mohammad Sayem</strong>
+        <nav class="nav-links" aria-label="Preview navigation">
+          <a href="#work">Work</a>
+          <a href="#stack">Stack</a>
+          <a href="mailto:sayemhasan4700@gmail.com">Contact</a>
+        </nav>
+      </header>
+
+      <main>
+        <section class="hero" aria-labelledby="hero-title">
+          <div>
+            <div class="status-pill">
+              <span class="status-dot" aria-hidden="true"></span>
+              Full stack developer - AI, NLP, LLMs
+            </div>
+
+            <h1 id="hero-title">
+              <span class="dim">Building</span> Useful Systems<br />
+              With Research Depth
+            </h1>
+
+            <p class="lead">
+              I build APIs, dashboards, desktop tools, and AI-focused experiments where clean product design meets strong backend logic and Bangla NLP research.
+            </p>
+
+            <div class="actions" aria-label="Primary links">
+              <a class="button primary" href="mailto:sayemhasan4700@gmail.com">Say Hello</a>
+              <a class="button" href="/Hasan-Mohammad-Sayem-Resume.pdf">Resume</a>
+              <a class="button social" href="https://github.com/SayemHasan74" aria-label="GitHub">GH</a>
+            </div>
+
+            <div id="work" class="project-cloud">
+              <h2 class="cloud-title"><span>Some of my</span> featured work</h2>
+              <div class="logo-grid" aria-label="Featured portfolio areas">
+                <a class="logo-card" href="/projects/soundsip">SoundSip</a>
+                <a class="logo-card" href="/projects/bangla-dyslexia-llm-thesis">Bangla NLP</a>
+                <a class="logo-card" href="/projects/disaster-response-platform">Disaster Map</a>
+                <a class="logo-card" href="/projects/devpulse-issue-tracker-api">DevPulse</a>
+                <a class="logo-card" href="/projects/pulse-overlay-stats-checker">Pulse Overlay</a>
+                <a class="logo-card" href="/projects/prism-video-player">Prism Player</a>
+                <a class="logo-card wide" href="/projects/tree-watering-3d-game">3D Tree Watering Game</a>
+                <a class="logo-card wide" href="https://github.com/SayemHasan74">GitHub Portfolio</a>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="stack" class="below" aria-label="Style interpretation">
+          <article class="glass-panel">
+            <h2>Style Translation</h2>
+            <p>
+              Dark empty space, centered oversized type, low-contrast gray text, small glowing particles, glassy rounded controls, animated light sweeps, and dense logo-style cards.
+            </p>
+          </article>
+
+          <article class="glass-panel">
+            <h2>How It Fits Your Homepage</h2>
+            <p>
+              Instead of a coming-soon page, this becomes your portfolio opening: your identity, a direct contact CTA, resume access, GitHub, and a glowing project grid that behaves like the client grid from the reference.
+            </p>
+            <div class="stack-list" aria-label="Core technologies">
+              <span>React</span>
+              <span>Node.js</span>
+              <span>Express</span>
+              <span>MongoDB</span>
+              <span>Python</span>
+              <span>NLP</span>
+              <span>LLMs</span>
+              <span>Dashboards</span>
+            </div>
+          </article>
+        </section>
+      </main>
+    </div>
+
+    <script>
+      const particleField = document.querySelector(".particle-field");
+      const particleCount = 78;
+
+      for (let i = 0; i < particleCount; i += 1) {
+        const particle = document.createElement("span");
+        const size = (Math.random() * 2.4 + 1).toFixed(2);
+        const duration = (Math.random() * 9 + 7).toFixed(2);
+        const delay = (Math.random() * -14).toFixed(2);
+        const pulseDelay = (Math.random() * -3).toFixed(2);
+        const opacity = (Math.random() * 0.58 + 0.22).toFixed(2);
+        const dx = (Math.random() * 160 - 50).toFixed(0);
+        const dy = (Math.random() * -190 - 70).toFixed(0);
+
+        particle.style.setProperty("--x", `${Math.random() * 100}%`);
+        particle.style.setProperty("--y", `${Math.random() * 100}%`);
+        particle.style.setProperty("--s", `${size}px`);
+        particle.style.setProperty("--d", `${duration}s`);
+        particle.style.setProperty("--delay", `${delay}s`);
+        particle.style.setProperty("--pulse-delay", `${pulseDelay}s`);
+        particle.style.setProperty("--o", opacity);
+        particle.style.setProperty("--dx", `${dx}px`);
+        particle.style.setProperty("--dy", `${dy}px`);
+        particleField.appendChild(particle);
+      }
+
+      const cards = document.querySelectorAll(".logo-card");
+
+      cards.forEach((card) => {
+        card.addEventListener("pointermove", (event) => {
+          const rect = card.getBoundingClientRect();
+          const x = ((event.clientX - rect.left) / rect.width) * 100;
+          const y = ((event.clientY - rect.top) / rect.height) * 100;
+          card.style.setProperty("--mx", `${x}%`);
+          card.style.setProperty("--my", `${y}%`);
+        });
+      });
+    </script>
+  </body>
+</html>
