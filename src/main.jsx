@@ -328,6 +328,7 @@ function App() {
         <Hero />
         <About />
         <Projects />
+        <NowBuilding />
         <Skills />
         <Education />
         <Contact />
@@ -340,7 +341,7 @@ function App() {
 function useDynamicPageEffects() {
   useEffect(() => {
     const revealItems = document.querySelectorAll(
-      ".reveal, .project-card, .stack-row, .season-timeline article, .contact-list a, .research-chips span, .hero-actions a"
+      ".reveal, .project-card, .stack-row, .season-timeline article, .build-timeline article, .contact-list a, .research-chips span, .hero-actions a"
     );
 
     const observer = new IntersectionObserver(
@@ -359,31 +360,35 @@ function useDynamicPageEffects() {
       observer.observe(item);
     });
 
-    const timeline = document.querySelector(".season-timeline");
-    const timelineItems = timeline ? [...timeline.querySelectorAll("article")] : [];
+    const timelines = [...document.querySelectorAll(".season-timeline, .build-timeline")];
 
     const updateTimeline = () => {
-      if (!timeline) return;
-
-      const rect = timeline.getBoundingClientRect();
       const viewportAnchor = window.innerHeight * 0.48;
-      const progress = Math.min(1, Math.max(0, (viewportAnchor - rect.top) / Math.max(rect.height, 1)));
-      timeline.style.setProperty("--timeline-progress", `${progress * 100}%`);
 
-      timelineItems.forEach((item) => {
-        const itemRect = item.getBoundingClientRect();
-        item.classList.toggle("is-active", itemRect.top < viewportAnchor);
+      timelines.forEach((timeline) => {
+        const rect = timeline.getBoundingClientRect();
+        const progress = Math.min(1, Math.max(0, (viewportAnchor - rect.top) / Math.max(rect.height, 1)));
+        timeline.style.setProperty("--timeline-progress", `${progress * 100}%`);
+
+        timeline.querySelectorAll("article").forEach((item) => {
+          const itemRect = item.getBoundingClientRect();
+          item.classList.toggle("is-active", itemRect.top < viewportAnchor);
+        });
       });
     };
 
     updateTimeline();
+    requestAnimationFrame(updateTimeline);
+    setTimeout(updateTimeline, 120);
     window.addEventListener("scroll", updateTimeline, { passive: true });
     window.addEventListener("resize", updateTimeline);
+    window.addEventListener("hashchange", updateTimeline);
 
     return () => {
       observer.disconnect();
       window.removeEventListener("scroll", updateTimeline);
       window.removeEventListener("resize", updateTimeline);
+      window.removeEventListener("hashchange", updateTimeline);
     };
   }, []);
 }
@@ -704,6 +709,53 @@ function Projects() {
             </div>
           </article>
         ))}
+      </div>
+    </section>
+  );
+}
+
+function NowBuilding() {
+  const buildingItems = [
+    {
+      title: "Bangla SMS Smishing Detection",
+      meta: "AI / Security",
+      description:
+        "Reuses my thesis' probing methodology - RSA, causal ablation, multi-model probing - for detecting smishing and spam patterns in Bangla SMS text, using BanglaBarta as the primary dataset.",
+      progress: 60,
+      note: "Dataset prep complete; probing pipeline next",
+    },
+    {
+      title: "Football Live Match Tracker",
+      meta: "PWA",
+      description:
+        "Real-time La Liga and Champions League score tracker built as a PWA, tuned to Bangladesh Standard Time, with backend caching to stay within free-tier sports API limits.",
+      progress: 35,
+      note: "Backend caching layer in progress",
+    },
+  ];
+
+  return (
+    <section id="now-building" className="section now-building-section reveal">
+      <div className="build-panel">
+        <div className="build-heading">
+          <span>Current Work</span>
+          <h2>Now Building</h2>
+        </div>
+        <div className="build-timeline">
+          {buildingItems.map((item) => (
+            <article className="build-card" key={item.title}>
+              <div className="build-card-top">
+                <span className="build-status">In Progress</span>
+              </div>
+              <h3>{item.title}</h3>
+              <p>{item.description}</p>
+              <div className="build-progress" style={{ "--progress": `${item.progress}%` }} aria-label={`${item.title} progress ${item.progress}%`}>
+                <span style={{ width: `${item.progress}%` }}></span>
+              </div>
+              <small>{item.note}</small>
+            </article>
+          ))}
+        </div>
       </div>
     </section>
   );

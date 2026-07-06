@@ -16,6 +16,7 @@
   --accent-soft: #f3f3f3;
   --live-blue: #2da8ff;
   --github-green: #44e38d;
+  --progress-blue: #58b7ff;
   --mono: "IBM Plex Mono", "SFMono-Regular", Consolas, "Liberation Mono", monospace;
   --serif: "Inter", "Manrope", "Segoe UI", ui-sans-serif, system-ui, sans-serif;
   --shadow: 0 22px 70px rgba(0, 0, 0, 0.58);
@@ -213,6 +214,7 @@ main,
 }
 
 .section {
+  scroll-margin-top: 96px;
   width: min(1180px, calc(100% - 44px));
   margin: 0 auto;
   padding: 76px 0;
@@ -234,6 +236,7 @@ main,
 .project-card,
 .stack-row,
 .season-timeline article,
+.build-timeline article,
 .contact-list a,
 .research-chips span,
 .hero-actions a {
@@ -251,6 +254,7 @@ main,
 .project-card.is-visible,
 .stack-row.is-visible,
 .season-timeline article.is-visible,
+.build-timeline article.is-visible,
 .contact-list a.is-visible,
 .research-chips span.is-visible,
 .hero-actions a.is-visible {
@@ -471,19 +475,19 @@ h3 {
 }
 
 .live-link {
-  border-color: rgba(45, 168, 255, 0.74);
+  border-color: color-mix(in srgb, var(--live-blue) 74%, transparent);
   color: #f7fbff;
   box-shadow:
     inset 0 1px rgba(255, 255, 255, 0.18),
-    0 0 22px rgba(45, 168, 255, 0.18);
+    0 0 22px color-mix(in srgb, var(--live-blue) 18%, transparent);
 }
 
 .github-link {
-  border-color: rgba(68, 227, 141, 0.72);
+  border-color: color-mix(in srgb, var(--github-green) 72%, transparent);
   color: #f6fff9;
   box-shadow:
     inset 0 1px rgba(255, 255, 255, 0.16),
-    0 0 22px rgba(68, 227, 141, 0.16);
+    0 0 22px color-mix(in srgb, var(--github-green) 16%, transparent);
 }
 
 .primary-button:hover,
@@ -510,15 +514,50 @@ h3 {
   place-items: center;
   width: 44px;
   height: 44px;
-  border: 1px solid var(--line);
+  border: 1px solid rgba(255, 255, 255, 0.34);
   border-radius: 50%;
-  background: var(--glass);
+  background:
+    linear-gradient(rgba(10, 10, 10, 0.9), rgba(10, 10, 10, 0.9)) padding-box,
+    conic-gradient(from var(--button-line-angle, 0deg), rgba(255, 255, 255, 0.92), rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.92)) border-box;
   overflow: hidden;
+  box-shadow:
+    inset 0 1px rgba(255, 255, 255, 0.18),
+    inset 0 -14px 24px rgba(255, 255, 255, 0.035),
+    0 0 18px rgba(255, 255, 255, 0.12);
+  animation: buttonOrbit 5.2s linear infinite;
 }
 
 .social-row a:first-child {
-  border-color: rgba(68, 227, 141, 0.72);
-  box-shadow: inset 0 1px rgba(255, 255, 255, 0.12), 0 0 22px rgba(68, 227, 141, 0.15);
+  box-shadow:
+    inset 0 1px rgba(255, 255, 255, 0.22),
+    inset 0 -14px 24px rgba(255, 255, 255, 0.04),
+    0 0 0 1px color-mix(in srgb, var(--github-green) 32%, transparent),
+    0 0 26px color-mix(in srgb, var(--github-green) 20%, transparent);
+}
+
+.social-row a:nth-child(2) {
+  color: #eaf3ff;
+  box-shadow:
+    inset 0 1px rgba(255, 255, 255, 0.2),
+    inset 0 -14px 24px rgba(255, 255, 255, 0.035),
+    0 0 0 1px rgba(77, 151, 255, 0.32),
+    0 0 26px rgba(77, 151, 255, 0.28);
+}
+
+.social-row a:nth-child(3) {
+  color: #fff0f0;
+  box-shadow:
+    inset 0 1px rgba(255, 255, 255, 0.2),
+    inset 0 -14px 24px rgba(255, 255, 255, 0.035),
+    0 0 0 1px rgba(255, 74, 88, 0.38),
+    0 0 26px rgba(255, 74, 88, 0.3);
+}
+
+.project-page-nav a[href*="github"],
+.resume-contact-card a[href*="github"] {
+  border-color: color-mix(in srgb, var(--github-green) 72%, transparent);
+  color: #f6fff9;
+  box-shadow: inset 0 1px rgba(255, 255, 255, 0.12), 0 0 22px color-mix(in srgb, var(--github-green) 15%, transparent);
 }
 
 .hero-stage {
@@ -650,6 +689,190 @@ h3 {
   margin-bottom: 0;
 }
 
+.now-building-section {
+  padding-top: 26px;
+}
+
+.build-panel {
+  position: relative;
+  padding: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.build-heading {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 34px;
+}
+
+.build-heading span,
+.build-card-top,
+.build-card small {
+  color: var(--muted);
+  font-family: var(--mono);
+  font-size: 0.72rem;
+}
+
+.build-heading span {
+  flex: 0 0 auto;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.build-heading h2 {
+  margin: 0;
+  font-size: clamp(1.45rem, 2.5vw, 2.15rem);
+}
+
+.build-heading::after {
+  content: "";
+  flex: 1 1 auto;
+  height: 1px;
+  background: var(--line);
+}
+
+.build-timeline {
+  --timeline-progress: 0%;
+  position: relative;
+  display: grid;
+  gap: 34px;
+  padding-left: 42px;
+}
+
+.build-timeline::before,
+.build-timeline::after {
+  content: "";
+  position: absolute;
+  left: 8px;
+  top: 8px;
+  width: 2px;
+  border-radius: 999px;
+}
+
+.build-timeline::before {
+  bottom: 8px;
+  background: rgba(255, 255, 255, 0.13);
+}
+
+.build-timeline::after {
+  height: var(--timeline-progress);
+  max-height: calc(100% - 16px);
+  background: #fff;
+  box-shadow: var(--glow);
+  transition: height 160ms linear;
+}
+
+.build-card {
+  position: relative;
+  max-width: 840px;
+  padding: 0 0 2px;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.build-card::before {
+  content: "";
+  position: absolute;
+  left: -42px;
+  top: 4px;
+  z-index: 1;
+  width: 16px;
+  height: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.34);
+  border-radius: 50%;
+  background: #111;
+  transition: background 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+}
+
+.build-card.is-active::before {
+  border-color: #fff;
+  background: #fff;
+  box-shadow: var(--glow);
+}
+
+.build-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 14px;
+  margin-bottom: 10px;
+}
+
+.build-status {
+  color: var(--accent-soft);
+  font-weight: 900;
+}
+
+.build-card h3 {
+  margin: 0 0 8px;
+}
+
+.build-card p {
+  max-width: 760px;
+  min-height: 0;
+  margin-bottom: 14px;
+  border: 0;
+  border-radius: 0;
+  padding: 0;
+  background: transparent;
+  color: var(--body);
+  font-size: 1rem;
+  line-height: 1.62;
+  box-shadow: none;
+}
+
+.build-progress {
+  position: relative;
+  max-width: 520px;
+  height: 18px;
+  margin: 3px 0 8px;
+  border-radius: 999px;
+  overflow: hidden;
+  background: transparent;
+}
+
+.build-progress span {
+  display: block;
+  position: relative;
+  top: 8px;
+  height: 3px;
+  border-radius: inherit;
+  background:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.95) 16%, var(--progress-blue) 72%, rgba(255, 255, 255, 0.92));
+  box-shadow:
+    0 0 8px rgba(255, 255, 255, 0.76),
+    0 0 22px color-mix(in srgb, var(--progress-blue) 42%, transparent),
+    0 0 70px color-mix(in srgb, var(--progress-blue) 22%, transparent);
+}
+
+.build-progress::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 8px;
+  height: 3px;
+  border-radius: inherit;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.build-progress span::after {
+  content: "";
+  position: absolute;
+  top: -11px;
+  right: -18px;
+  width: 70px;
+  height: 25px;
+  border-radius: 999px;
+  background: radial-gradient(ellipse at 62% 50%, rgba(255, 255, 255, 0.78), rgba(88, 183, 255, 0.18) 36%, transparent 70%);
+  filter: blur(4px);
+  opacity: 0.9;
+  animation: beamPulse 2.8s ease-in-out infinite;
+}
+
 .project-grid {
   position: relative;
   display: grid;
@@ -668,13 +891,13 @@ h3 {
   z-index: 1;
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(320px, 0.44fr);
-  min-height: 250px;
-  border: 1px solid rgba(255, 255, 255, 0.105);
+  min-height: 218px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 10px;
   background:
-    linear-gradient(115deg, transparent 0 18%, rgba(255, 255, 255, 0.032) 18% 31%, transparent 31% 100%),
-    linear-gradient(270deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.018) 44%, rgba(255, 255, 255, 0.038)),
-    rgba(8, 8, 8, 0.78);
+    linear-gradient(115deg, transparent 0 18%, rgba(255, 255, 255, 0.046) 18% 31%, transparent 31% 100%),
+    linear-gradient(270deg, rgba(255, 255, 255, 0.075), rgba(255, 255, 255, 0.026) 44%, rgba(255, 255, 255, 0.052)),
+    rgba(10, 10, 10, 0.82);
   box-shadow:
     0 18px 56px rgba(0, 0, 0, 0.42),
     inset 0 1px rgba(255, 255, 255, 0.08);
@@ -706,7 +929,7 @@ h3 {
 .visual-card {
   width: 100%;
   height: 100%;
-  min-height: 250px;
+  min-height: 218px;
   background: #111;
 }
 
@@ -721,7 +944,7 @@ h3 {
   display: flex;
   flex: 1;
   flex-direction: column;
-  padding: 28px;
+  padding: 22px 24px;
 }
 
 .project-status {
@@ -735,20 +958,20 @@ h3 {
 
 .project-card p:not(.card-eyebrow):not(.project-status) {
   color: #c7c7c7;
-  font-size: 0.94rem;
-  line-height: 1.58;
+  font-size: 0.9rem;
+  line-height: 1.46;
 }
 
 .mini-feature-row {
-  margin-top: 18px;
-  padding-top: 14px;
+  margin-top: 12px;
+  padding-top: 10px;
 }
 
 .project-card-actions {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
-  margin-top: 18px;
+  margin-top: 12px;
 }
 
 .details-link {
@@ -764,19 +987,53 @@ h3 {
   min-height: 44px;
   border: 2px solid transparent;
   padding: 0 18px;
+  color: #fff5f5;
   background:
     linear-gradient(rgba(10, 10, 10, 0.92), rgba(10, 10, 10, 0.92)) padding-box,
-    conic-gradient(from var(--button-line-angle, 0deg), rgba(255, 255, 255, 0.82) 0 18%, rgba(0, 154, 255, 0.95) 28% 40%, rgba(255, 255, 255, 0.42) 52% 72%, rgba(255, 255, 255, 0.82) 88% 100%) border-box;
+    conic-gradient(from var(--button-line-angle, 0deg), rgba(255, 255, 255, 0.84) 0 18%, rgba(150, 130, 134, 0.96) 28% 42%, rgba(255, 255, 255, 0.44) 54% 72%, rgba(255, 255, 255, 0.84) 88% 100%) border-box;
   box-shadow:
     inset 0 1px rgba(255, 255, 255, 0.18),
     inset 0 -16px 24px rgba(255, 255, 255, 0.035),
-    0 0 0 1px rgba(255, 255, 255, 0.18),
-    0 0 20px rgba(0, 154, 255, 0.22);
+    0 0 0 1px rgba(150, 130, 134, 0.26),
+    0 0 22px rgba(112, 36, 42, 0.3);
   text-shadow: 0 0 12px rgba(255, 255, 255, 0.28);
   animation: buttonOrbit 4.4s linear infinite;
 }
 
+.project-card-actions .live-link,
+.project-card-actions .github-link {
+  min-height: 44px;
+  border: 2px solid transparent;
+  padding: 0 18px;
+  background:
+    linear-gradient(rgba(10, 10, 10, 0.92), rgba(10, 10, 10, 0.92)) padding-box,
+    conic-gradient(from var(--button-line-angle, 0deg), rgba(255, 255, 255, 0.82) 0 18%, var(--action-tint) 28% 42%, rgba(255, 255, 255, 0.44) 54% 72%, rgba(255, 255, 255, 0.82) 88% 100%) border-box;
+  box-shadow:
+    inset 0 1px rgba(255, 255, 255, 0.18),
+    inset 0 -16px 24px rgba(255, 255, 255, 0.035),
+    0 0 0 1px var(--action-edge),
+    0 0 22px var(--action-glow);
+  animation: buttonOrbit 4.4s linear infinite;
+}
+
+.project-card-actions .live-link {
+  --action-tint: rgba(87, 105, 125, 0.96);
+  --action-edge: rgba(87, 105, 125, 0.34);
+  --action-glow: rgba(24, 56, 92, 0.34);
+}
+
+.project-card-actions .github-link {
+  --action-tint: rgba(102, 126, 113, 0.96);
+  --action-edge: rgba(102, 126, 113, 0.34);
+  --action-glow: rgba(24, 80, 48, 0.34);
+}
+
 .project-card-actions .details-link:not(.live-link):not(.github-link)::after {
+  content: none;
+}
+
+.project-card-actions .live-link::after,
+.project-card-actions .github-link::after {
   content: none;
 }
 
@@ -785,15 +1042,26 @@ h3 {
   box-shadow:
     inset 0 1px rgba(255, 255, 255, 0.24),
     inset 0 -16px 24px rgba(255, 255, 255, 0.045),
-    0 0 0 1px rgba(255, 255, 255, 0.2),
+    0 0 0 1px rgba(150, 130, 134, 0.34),
     0 0 10px rgba(255, 255, 255, 0.42),
-    0 0 28px rgba(0, 154, 255, 0.34);
+    0 0 28px rgba(112, 36, 42, 0.36);
+}
+
+.project-card-actions .live-link:hover,
+.project-card-actions .github-link:hover {
+  border-color: transparent;
+  box-shadow:
+    inset 0 1px rgba(255, 255, 255, 0.24),
+    inset 0 -16px 24px rgba(255, 255, 255, 0.045),
+    0 0 0 1px var(--action-edge),
+    0 0 10px rgba(255, 255, 255, 0.4),
+    0 0 28px var(--action-glow);
 }
 
 .project-visual-wrap {
   position: relative;
   z-index: 1;
-  min-height: 250px;
+  min-height: 218px;
   border-left: 1px solid rgba(255, 255, 255, 0.075);
   background:
     linear-gradient(115deg, rgba(255, 255, 255, 0.034), transparent 42%),
@@ -1182,6 +1450,11 @@ h3 {
   50% { transform: translateX(0) scaleX(1); }
 }
 
+@keyframes beamPulse {
+  0%, 100% { transform: translateX(-8px) scaleX(0.92); opacity: 0.55; }
+  50% { transform: translateX(8px) scaleX(1.12); opacity: 1; }
+}
+
 @keyframes orbitLine {
   to { --line-angle: 360deg; }
 }
@@ -1215,6 +1488,18 @@ h3 {
     animation-iteration-count: 1 !important;
     scroll-behavior: auto !important;
     transition-duration: 0.01ms !important;
+  }
+
+  .reveal,
+  .project-card,
+  .stack-row,
+  .season-timeline article,
+  .build-timeline article,
+  .contact-list a,
+  .research-chips span,
+  .hero-actions a {
+    opacity: 1 !important;
+    transform: none !important;
   }
 }
 
@@ -1302,12 +1587,14 @@ h3 {
     overflow-wrap: anywhere;
   }
 
+  .build-heading,
   .numbered-heading {
     align-items: flex-start;
     flex-direction: column;
     gap: 10px;
   }
 
+  .build-heading::after,
   .numbered-heading::after {
     width: 100%;
     flex: none;
