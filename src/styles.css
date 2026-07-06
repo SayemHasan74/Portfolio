@@ -241,10 +241,10 @@ main,
 .research-chips span,
 .hero-actions a {
   opacity: 0;
-  transform: translateY(34px);
+  transform: translateY(22px);
   transition:
-    opacity 720ms ease,
-    transform 720ms cubic-bezier(0.2, 0.8, 0.2, 1),
+    opacity 460ms ease,
+    transform 500ms cubic-bezier(0.2, 0.8, 0.2, 1),
     border-color 180ms ease,
     box-shadow 180ms ease;
   transition-delay: var(--reveal-delay, 0ms);
@@ -902,6 +902,21 @@ h3 {
     0 18px 56px rgba(0, 0, 0, 0.42),
     inset 0 1px rgba(255, 255, 255, 0.08);
   overflow: hidden;
+}
+
+.project-card {
+  opacity: 0.38;
+  transform: translateY(14px);
+  transition:
+    opacity 360ms ease,
+    transform 420ms cubic-bezier(0.2, 0.8, 0.2, 1),
+    box-shadow 180ms ease,
+    border-color 180ms ease;
+}
+
+.project-card.is-visible {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .project-card::before {

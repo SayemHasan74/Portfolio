@@ -347,16 +347,15 @@ function useDynamicPageEffects() {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("is-visible");
-          }
+          entry.target.classList.toggle("is-visible", entry.isIntersecting);
         });
       },
-      { threshold: 0.16, rootMargin: "0px 0px -8% 0px" }
+      { threshold: 0.08, rootMargin: "0px 0px -10% 0px" }
     );
 
     revealItems.forEach((item, index) => {
-      item.style.setProperty("--reveal-delay", `${Math.min(index % 9, 8) * 70}ms`);
+      const shouldStagger = item.matches(".research-chips span, .hero-actions a");
+      item.style.setProperty("--reveal-delay", shouldStagger ? `${Math.min(index % 5, 4) * 45}ms` : "0ms");
       observer.observe(item);
     });
 
@@ -563,7 +562,7 @@ function Hero() {
       <div className="hero-stage reveal">
         <div className="hero-figure-card">
           <div className="hero-photo-wrap">
-            <img src="/assets/hasan-sayem.png" alt="Hasan Mohammad Sayem" className="hero-photo" />
+            <img src="/assets/hasan-sayem.jpg" alt="Hasan Mohammad Sayem" className="hero-photo" decoding="async" fetchPriority="high" />
           </div>
           <p className="figure-caption">
             <strong>Fig. 0.</strong> Hasan Mohammad Sayem - full-stack engineering, Bangla NLP research, backend APIs, and product interfaces.
@@ -763,7 +762,7 @@ function NowBuilding() {
 
 function ProjectVisual({ project }) {
   if (project.image) {
-    return <img className="project-image" src={project.image} alt={`${project.name} screenshot`} />;
+    return <img className="project-image" src={project.image} alt={`${project.name} screenshot`} loading="lazy" decoding="async" />;
   }
 
   return (
