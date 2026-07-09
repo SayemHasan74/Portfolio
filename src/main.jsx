@@ -405,6 +405,9 @@ function BackgroundEffects() {
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (reduceMotion || particles.length === 0) return;
 
+    const isCoarsePointer = window.matchMedia("(pointer: coarse)").matches;
+    const radius = isCoarsePointer ? 250 : 210;
+    const maxForce = isCoarsePointer ? 96 : 78;
     let frame = 0;
     let mouseX = -9999;
     let mouseY = -9999;
@@ -418,24 +421,29 @@ function BackgroundEffects() {
         const x = cx - mouseX;
         const y = cy - mouseY;
         const distance = Math.hypot(x, y);
-        const radius = 150;
-
         if (distance > radius || distance === 0) {
           particle.style.setProperty("--push-x", "0px");
           particle.style.setProperty("--push-y", "0px");
           return;
         }
 
-        const force = (1 - distance / radius) * 46;
+        const force = (1 - distance / radius) * maxForce;
         particle.style.setProperty("--push-x", `${(x / distance) * force}px`);
         particle.style.setProperty("--push-y", `${(y / distance) * force}px`);
       });
     };
 
-    const requestUpdate = (event) => {
-      mouseX = event.clientX;
-      mouseY = event.clientY;
+    const moveDust = (x, y) => {
+      mouseX = x;
+      mouseY = y;
       if (!frame) frame = window.requestAnimationFrame(updateParticles);
+    };
+
+    const requestUpdate = (event) => moveDust(event.clientX, event.clientY);
+
+    const requestTouchUpdate = (event) => {
+      const touch = event.touches?.[0];
+      if (touch) moveDust(touch.clientX, touch.clientY);
     };
 
     const resetParticles = () => {
@@ -445,11 +453,23 @@ function BackgroundEffects() {
     };
 
     window.addEventListener("pointermove", requestUpdate, { passive: true });
+    window.addEventListener("pointerdown", requestUpdate, { passive: true });
+    window.addEventListener("pointercancel", resetParticles);
     window.addEventListener("pointerleave", resetParticles);
+    window.addEventListener("touchstart", requestTouchUpdate, { passive: true });
+    window.addEventListener("touchmove", requestTouchUpdate, { passive: true });
+    window.addEventListener("touchend", resetParticles);
+    window.addEventListener("touchcancel", resetParticles);
 
     return () => {
       window.removeEventListener("pointermove", requestUpdate);
+      window.removeEventListener("pointerdown", requestUpdate);
+      window.removeEventListener("pointercancel", resetParticles);
       window.removeEventListener("pointerleave", resetParticles);
+      window.removeEventListener("touchstart", requestTouchUpdate);
+      window.removeEventListener("touchmove", requestTouchUpdate);
+      window.removeEventListener("touchend", resetParticles);
+      window.removeEventListener("touchcancel", resetParticles);
       if (frame) window.cancelAnimationFrame(frame);
     };
   }, []);
@@ -458,7 +478,7 @@ function BackgroundEffects() {
     <>
       <div className="space-light" aria-hidden="true"></div>
       <div className="particle-field" aria-hidden="true">
-        {Array.from({ length: 76 }).map((_, index) => {
+        {Array.from({ length: 112 }).map((_, index) => {
           const x = (index * 37) % 100;
           const y = (index * 61) % 100;
           const size = 1.2 + (index % 4) * 0.62;
