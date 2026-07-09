@@ -60,6 +60,17 @@ const skills = [
   },
 ];
 
+const buildTools = [
+  { name: "React", icon: Code2 },
+  { name: "Node.js", icon: Rocket },
+  { name: "MongoDB", icon: Layers3 },
+  { name: "Python", icon: BrainCircuit },
+  { name: "Tailwind", icon: Sparkles },
+  { name: "Vite", icon: Activity },
+  { name: "GitHub", icon: Github },
+  { name: "REST APIs", icon: Target },
+];
+
 const projects = [
   {
     slug: "soundsip",
@@ -608,22 +619,88 @@ function ActivityStrip() {
 }
 
 function About() {
+  const focusCards = [
+    {
+      title: "Full-stack systems",
+      copy: "React interfaces, Node/Express APIs, real-time features, dashboards, and production-minded web apps.",
+      icon: Code2,
+    },
+    {
+      title: "AI and Bangla NLP",
+      copy: "Multilingual LLM probing, Bangla text research, practical AI experiments, and research tools.",
+      icon: BrainCircuit,
+    },
+    {
+      title: "Tools people can use",
+      copy: "Desktop utilities, maps, trackers, music platforms, and clean workflows that make complex ideas usable.",
+      icon: Rocket,
+    },
+  ];
+
+  const facts = [
+    ["Based in", "Dhaka, Bangladesh"],
+    ["Studying", "CSE at BRAC"],
+    ["Focus", "MERN / AI / NLP"],
+    ["Award", "Duke Bronze"],
+  ];
+
   return (
     <section id="about" className="section about-section reveal">
-      <div>
-        <p className="section-kicker">About Me</p>
-        <h2>Full-stack builder, research-minded teammate, and lifelong space enthusiast.</h2>
+      <div className="about-dossier">
+        <div className="about-orbit-icon">
+          <GraduationCap size={22} />
+        </div>
+        <p className="section-kicker">Current Track</p>
+        <h2>CSE student building full-stack products, research tools, and AI-minded systems.</h2>
+        <p>
+          BRAC University student focused on clean web apps, backend APIs, Bangla NLP research, dashboards, and software that feels useful beyond the demo.
+        </p>
+
+        <div className="about-award">
+          <div className="award-icon">
+            <Trophy size={20} />
+          </div>
+          <div>
+            <span>Award</span>
+            <strong>The Duke of Edinburgh's International Award</strong>
+            <p>Bronze Medalist, recognized through service, skill development, physical recreation, and adventurous journey work.</p>
+          </div>
+        </div>
+
+        <div className="about-facts">
+          {facts.map(([label, value]) => (
+            <div key={label}>
+              <MapPin size={13} />
+              <span>{label}</span>
+              <strong>{value}</strong>
+            </div>
+          ))}
+        </div>
       </div>
-      <div className="about-panel">
-        <p>
-          I build full-stack applications, backend APIs, dashboards, desktop tools, and research-driven software. My strongest interests sit around Bangla NLP, multilingual LLMs, and practical systems that turn technical ideas into something people can actually use.
+
+      <div className="about-story">
+        <p className="about-lead">
+          I like building from the point where an idea is still messy. A music platform needs real playback state, a research project needs careful probing, a tracker needs reliable data flow, and a dashboard needs to make decisions easier.
         </p>
         <p>
-          I have worked on team projects and genuinely enjoy collaborative development. I am comfortable coordinating feature work, communicating clearly, managing shared responsibilities, and helping a team keep momentum from idea to delivery.
+          My work sits between full-stack engineering and AI research. I enjoy React frontends, Node/Express backends, MongoDB data models, desktop utilities, and Bangla NLP experiments with multilingual LLMs. The part that keeps me hooked is turning technical pieces into something coherent enough for people to actually use.
         </p>
         <p>
-          Outside the usual code and research loop, I am also enthusiastic about astronomy and space. That curiosity shapes the way I like to explore systems: patiently, experimentally, and with attention to patterns.
+          I also enjoy team projects. I care about communication, shared ownership, and keeping momentum when features, bugs, and deadlines all arrive at once. Outside code, astronomy and space keep me curious about patterns, systems, and the long view.
         </p>
+
+        <div className="about-focus-grid">
+          {focusCards.map((card) => {
+            const Icon = card.icon;
+            return (
+              <article key={card.title}>
+                <Icon size={20} />
+                <h3>{card.title}</h3>
+                <p>{card.copy}</p>
+              </article>
+            );
+          })}
+        </div>
       </div>
     </section>
   );
@@ -690,6 +767,7 @@ function Education() {
 function Projects() {
   return (
     <section id="projects" className="section reveal">
+      <TechFlowStrip />
       <div className="numbered-heading">
         <span>01</span>
         <h2>Contributions</h2>
@@ -730,6 +808,32 @@ function Projects() {
         ))}
       </div>
     </section>
+  );
+}
+
+function TechFlowStrip() {
+  const marqueeItems = [...buildTools, ...buildTools];
+
+  return (
+    <div className="tech-flow-strip" aria-label="What I build with">
+      <div className="tech-flow-copy">
+        <span>What I build with</span>
+        <p>Full-stack, AI research, dashboards, APIs, and polished interfaces.</p>
+      </div>
+      <div className="tech-flow-window" aria-hidden="true">
+        <div className="tech-flow-track">
+          {marqueeItems.map((tool, index) => {
+            const Icon = tool.icon;
+            return (
+              <span className="tech-flow-pill" key={`${tool.name}-${index}`}>
+                <Icon size={17} />
+                {tool.name}
+              </span>
+            );
+          })}
+        </div>
+      </div>
+    </div>
   );
 }
 
